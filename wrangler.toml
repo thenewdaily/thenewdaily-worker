@@ -1,0 +1,4 @@
+name = "thenewdaily-worker"
+main = "src/index.js"
+compatibility_date = "2024-05-11"
+account_id = "9d84fea1e08ee5d3300c2cf578dcb98c"
