@@ -93,7 +93,7 @@ export default {
 
       const purgePathUrl = `https://thenewdaily.com.au/api/purgeCloudflareCache?paths=${request.url}`;
 
-      const purgeResponse = await fetch(purgePathUrl, { cache: "no-cache" });
+      const purgeResponse = await fetch(purgePathUrl);
 
       const purgeResponseBody = await purgeResponse.clone().text();
 
