@@ -91,13 +91,12 @@ export default {
 
       const newRequestWithQuery = new Request(refetchUrl);
 
-      const purgePathUrl = `https://thenewdaily.com.au/api/purgeCloudflareCache?paths=${request.url}`;
-
-      const purgeResponse = await fetch(purgePathUrl);
-
-      const purgeResponseBody = await purgeResponse.clone().text();
-
-      console.log("error ℹ️ purge", purgeResponseBody);
+      if (request?.url) {
+        const purgePathUrl = `https://thenewdaily.com.au/api/purgeCloudflareCache?paths=${request.url}`;
+        const purgeResponse = await fetch(purgePathUrl);
+        const purgeResponseBody = await purgeResponse.clone().text();
+        console.log("error ℹ️ purge", purgeResponseBody);
+      }
 
       // OK, now we retry the request, and replace the response with the
       // new version.
