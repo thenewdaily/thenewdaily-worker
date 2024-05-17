@@ -89,7 +89,8 @@ export default {
       const refetchUrl = new URL(request.url);
       refetchUrl.searchParams.append("c", "1");
 
-      console.log("error ℹ️ url", refetchUrl);
+      console.log("error ℹ️ refetch url", refetchUrl);
+      console.log("error ℹ️ purge url", request.url);
 
       const newRequestWithQuery = new Request(refetchUrl);
 
