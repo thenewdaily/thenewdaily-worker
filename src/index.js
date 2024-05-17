@@ -59,61 +59,61 @@ export default {
       response = await fetch(request);
     }
 
-    // 500 or 522 status error check
+    // // 500 or 522 status error check
 
-    let currentErrorAttempt = 0;
+    // let currentErrorAttempt = 0;
 
-    while (
-      (response.status == 500 ||
-        response.status == 522 ||
-        response.status == 524) &&
-      currentErrorAttempt < MAX_ERROR_ATTEMPTS
-    ) {
-      console.log("🛑 error hit", response.status);
+    // while (
+    //   (response.status == 500 ||
+    //     response.status == 522 ||
+    //     response.status == 524) &&
+    //   currentErrorAttempt < MAX_ERROR_ATTEMPTS
+    // ) {
+    //   console.log("🛑 error hit", response.status);
 
-      const responseBody = await response.clone().text();
-      console.log("error body:", String(responseBody).substring(0, 100));
+    //   const responseBody = await response.clone().text();
+    //   console.log("error body:", String(responseBody).substring(0, 100));
 
-      // The server returned status 500. Let's retry the request. But
-      // we'll only retry once, since we don't want to get stuck in an
-      // infinite retry loop.
+    //   // The server returned status 500. Let's retry the request. But
+    //   // we'll only retry once, since we don't want to get stuck in an
+    //   // infinite retry loop.
 
-      // Let's discard the previous response body. This is not strictly
-      // required but it helps let the Workers Runtime know that it doesn't
-      // need to hold open the HTTP connection for the failed request.
-      // await response.arrayBuffer();
+    //   // Let's discard the previous response body. This is not strictly
+    //   // required but it helps let the Workers Runtime know that it doesn't
+    //   // need to hold open the HTTP connection for the failed request.
+    //   // await response.arrayBuffer();
 
-      // Add a 10 second delay for debugging
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+    //   // Add a 10 second delay for debugging
+    //   await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      const refetchUrl = new URL(request.url);
-      refetchUrl.searchParams.append("c", "1");
+    //   const refetchUrl = new URL(request.url);
+    //   refetchUrl.searchParams.append("c", "1");
 
-      console.log("error ℹ️ refetch url", refetchUrl);
-      console.log("error ℹ️ purge url", request.url);
+    //   console.log("error ℹ️ refetch url", refetchUrl);
+    //   console.log("error ℹ️ purge url", request.url);
 
-      const newRequestWithQuery = new Request(refetchUrl);
+    //   const newRequestWithQuery = new Request(refetchUrl);
 
-      if (request?.url) {
-        const purgePathUrl = `https://thenewdaily.com.au/api/purgeCloudflareCache?paths=${request.url}`;
-        const purgeResponse = await fetch(purgePathUrl);
-        const purgeResponseBody = await purgeResponse.clone().text();
-        console.log("error ℹ️ purge", purgeResponseBody);
-      }
+    //   if (request?.url) {
+    //     const purgePathUrl = `https://thenewdaily.com.au/api/purgeCloudflareCache?paths=${request.url}`;
+    //     const purgeResponse = await fetch(purgePathUrl);
+    //     const purgeResponseBody = await purgeResponse.clone().text();
+    //     console.log("error ℹ️ purge", purgeResponseBody);
+    //   }
 
-      // OK, now we retry the request, and replace the response with the
-      // new version.
-      response = await fetch(newRequestWithQuery);
+    //   // OK, now we retry the request, and replace the response with the
+    //   // new version.
+    //   response = await fetch(newRequestWithQuery);
 
-      const responseBodyRefetch = await response.clone().text();
+    //   const responseBodyRefetch = await response.clone().text();
 
-      console.log(
-        "error refetch ",
-        String(responseBodyRefetch.substring(0, 100))
-      );
+    //   console.log(
+    //     "error refetch ",
+    //     String(responseBodyRefetch.substring(0, 100))
+    //   );
 
-      currentErrorAttempt++;
-    }
+    //   currentErrorAttempt++;
+    // }
 
     return response;
   },
