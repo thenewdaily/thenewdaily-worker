@@ -70,7 +70,7 @@ export default {
       console.log("🛑 error hit", response.status);
 
       const responseBody = await response.clone().text();
-      console.log("error body:", responseBody);
+      console.log("error body:", String(responseBody).substring(0, 100));
 
       // The server returned status 500. Let's retry the request. But
       // we'll only retry once, since we don't want to get stuck in an
@@ -82,7 +82,7 @@ export default {
       // await response.arrayBuffer();
 
       // Add a 10 second delay for debugging
-      await new Promise((resolve) => setTimeout(resolve, 20000));
+      await new Promise((resolve) => setTimeout(resolve, 7000));
 
       // OK, now we retry the request, and replace the response with the
       // new version.
@@ -90,7 +90,10 @@ export default {
 
       const responseBodyRefetch = await response.clone().text();
 
-      console.log("error refetch ", responseBodyRefetch);
+      console.log(
+        "error refetch ",
+        String(responseBodyRefetch.substring(0, 100))
+      );
 
       currentErrorAttempt++;
     }
