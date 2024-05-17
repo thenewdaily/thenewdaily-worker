@@ -64,7 +64,9 @@ export default {
     let currentErrorAttempt = 0;
 
     while (
-      (response.status == 500 || response.status == 522) &&
+      (response.status == 500 ||
+        response.status == 522 ||
+        response.status == 524) &&
       currentErrorAttempt < MAX_ERROR_ATTEMPTS
     ) {
       console.log("🛑 error hit", response.status);
