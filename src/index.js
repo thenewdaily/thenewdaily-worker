@@ -82,11 +82,26 @@ export default {
       // await response.arrayBuffer();
 
       // Add a 10 second delay for debugging
-      await new Promise((resolve) => setTimeout(resolve, 7000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      const refetchUrl = new URL(request.url);
+      refetchUrl.searchParams.append("c", "1");
+
+      console.log("error ℹ️ url", refetchUrl);
+
+      const newRequestWithQuery = new Request(refetchUrl);
+
+      const purgePathUrl = `https://thenewdaily.com.au/api/purgeCloudflareCache?paths=${request.url}`;
+
+      const purgeResponse = await fetch(purgePathUrl, { cache: "no-cache" });
+
+      const purgeResponseBody = await purgeResponse.clone().text();
+
+      console.log("error ℹ️ purge", purgeResponseBody);
 
       // OK, now we retry the request, and replace the response with the
       // new version.
-      response = await fetch(request);
+      response = await fetch(newRequestWithQuery);
 
       const responseBodyRefetch = await response.clone().text();
 
